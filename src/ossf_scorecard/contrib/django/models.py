@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Visit https://github.com/nexB/ScoreCode for support and
+# Visit https://github.com/aboutcode-org/ScoreCode for support and
 # download.
 
 from django.core.exceptions import ValidationError
