@@ -1,3 +1,4 @@
+
 ################################################################################
 # We use Azure to run the full tests suites on multiple Python 3.x
 # on multiple Windows, macOS and Linux versions all on 64 bits
@@ -5,13 +6,14 @@
 ################################################################################
 
 jobs:
+
     - template: etc/ci/azure-posix.yml
       parameters:
           job_name: ubuntu20_cpython
           image_name: ubuntu-20.04
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv/bin/pytest -n 2 -vvs
+              all: venv/bin/pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-posix.yml
       parameters:
@@ -19,7 +21,7 @@ jobs:
           image_name: ubuntu-22.04
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv/bin/pytest -n 2 -vvs
+              all: venv/bin/pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-posix.yml
       parameters:
@@ -27,7 +29,7 @@ jobs:
           image_name: macOS-12
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv/bin/pytest -n 2 -vvs
+              all: venv/bin/pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-posix.yml
       parameters:
@@ -35,7 +37,7 @@ jobs:
           image_name: macOS-13
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv/bin/pytest -n 2 -vvs
+              all: venv/bin/pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-posix.yml
       parameters:
@@ -43,7 +45,7 @@ jobs:
           image_name: macOS-14
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv/bin/pytest -n 2 -vvs
+              all: venv/bin/pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-win.yml
       parameters:
@@ -51,7 +53,7 @@ jobs:
           image_name: windows-2019
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv\Scripts\pytest -n 2 -vvs
+              all: venv\Scripts\pytest -n 2 -vvs tests
 
     - template: etc/ci/azure-win.yml
       parameters:
@@ -59,4 +61,4 @@ jobs:
           image_name: windows-2022
           python_versions: ['3.8', '3.9', '3.10', '3.11', '3.12']
           test_suites:
-              all: venv\Scripts\pytest -n 2 -vvs
+              all: venv\Scripts\pytest -n 2 -vvs tests
