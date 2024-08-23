@@ -1,5 +1,5 @@
 =============================
-Scorecard
+ScoreCode
 =============================
 
 ScoreCode is a tool for assessing the security and compliance of software projects. It
@@ -18,24 +18,19 @@ To install Scorecard, you can use pip:
 
 .. code-block:: bash
 
-    pip install scorecard
+    pip install scorecode
 
 Usage
 -----
 
-To use Scorecard, you need to call the `GetScorecard` function with the appropriate parameters. Below is a basic usage example:
+To use Scorecard, you need to call the `fetch_scorecard` function with the appropriate parameters. Below is a basic usage example:
 
 .. code-block:: python
 
-    from scorecard import GetScorecard
+    from scorecode.ossf_scorecard import fetch_scorecard
 
-    # Define platform, organization, and repository
-    platform = "github.com"
-    org = "nexB"
-    repo = "scancode-toolkit"
-
-    # Fetch the scorecard
-    data = GetScorecard(platform="github.com", org="nexB", repo="scancode-toolkit")
+    # Fetch the scorecard data for a specific platform org and repo
+    data = fetch_scorecard(platform="github.com", org="nexB", repo="scancode-toolkit")
 
     # Print the results
     print("Scoring Tool:", data.scoring_tool)
@@ -52,4 +47,4 @@ To run the tests, use pytest. Ensure that all dependencies are installed and the
 
 .. code-block:: bash
 
-    pytest tests
+    make test
