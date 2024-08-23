@@ -6,6 +6,7 @@
 # See https://aboutcode.org for more information about nexB OSS projects.
 #
 
+
 def remove_fragment(url: str):
     """
     Return a URL without fragments

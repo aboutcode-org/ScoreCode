@@ -60,6 +60,7 @@ def fetch_scorecard_info(package, logger):
             )
             return scorecard_data
 
+
 def extract_repo_info(url, check_url_existence=False):
     """
     Extract platform, org, and repo from a given GitHub or GitLab URL.

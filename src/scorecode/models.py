@@ -112,7 +112,7 @@ class PackageScore(ModelMixin):
     checks = List(item_type=ScorecardCheck, label="checks", help="List of all checks used")
 
     @classmethod
-    def from_data(cls, scorecard_data, sc):
+    def from_data(cls, scorecard_data):
         """
         Return PackageScore object created from a `scorecard_data` mapping.
         """
@@ -122,7 +122,7 @@ class PackageScore(ModelMixin):
             "scoring_tool_documentation_url": remove_fragment(
                 scorecard_data.get("checks")[0].get("documentation").get("url")
             ),
-            #This needs to be a constant variable
+            # This needs to be a constant variable
             "scoring_tool": "ossf_scorecard",
             "score_date": scorecard_data.get("date", None),
             "checks": ScorecardCheck.from_data(scorecard_data.get("checks", [])),

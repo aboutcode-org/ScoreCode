@@ -7,5 +7,3 @@
 #
 
 OSSF_SCORECARD_API_URL = "https://api.securityscorecards.dev"
-
-
