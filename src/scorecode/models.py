@@ -1,27 +1,26 @@
+#
+# Copyright (c) nexB Inc. and others. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+# See http://www.apache.org/licenses/LICENSE-2.0 for the license text.
+# See https://github.com/aboutcode-org/scorecode for support or download.
+# See https://aboutcode.org for more information about nexB OSS projects.
+#
+
 import attr
 from commoncode.datautils import Date
 from commoncode.datautils import List
 from commoncode.datautils import String
 
-from ossf_scorecard.contrib.utils import FetchDocumentationUrl
+from scorecode.utils import remove_fragment
 
 
 class ModelMixin:
-    """
-    Base mixin for all package models.
-    """
 
     def to_dict(self, **kwargs):
         """
         Return a mapping of primitive Python types.
         """
         return attr.asdict(self)
-
-    def to_tuple(self, **kwargs):
-        """
-        Return a hashable tuple of primitive Python types.
-        """
-        return to_tuple(self.to_dict(**kwargs))
 
     @classmethod
     def from_dict(cls, mapping):
@@ -35,28 +34,8 @@ class ModelMixin:
         return cls(**kwargs)
 
 
-def to_tuple(collection):
-    """
-    Return a tuple of basic Python values by recursively converting a mapping
-    and all its sub-mappings.
-    For example::
-    >>> to_tuple({7: [1,2,3], 9: {1: [2,6,8]}})
-    ((7, (1, 2, 3)), (9, ((1, (2, 6, 8)),)))
-    """
-    if isinstance(collection, dict):
-        collection = tuple(collection.items())
-    assert isinstance(collection, (tuple, list))
-    results = []
-    for item in collection:
-        if isinstance(item, (list, tuple, dict)):
-            results.append(to_tuple(item))
-        else:
-            results.append(item)
-    return tuple(results)
-
-
 @attr.attributes(slots=True)
-class ScorecardChecksMixin(ModelMixin):
+class ScorecardCheck(ModelMixin):
 
     check_name = String(
         repr=True,
@@ -90,29 +69,23 @@ class ScorecardChecksMixin(ModelMixin):
         """
         Return a list of check objects for a package.
         """
-        data = []
+        checks = []
 
         for check in check_data:
-
-            final_data = {
+            data = {
                 "check_name": check.get("name"),
                 "check_score": str(check.get("score")),
                 "details": check.get("details", None),
             }
+            checks.append(cls(**data))
 
-            scorecard_data = cls(**final_data)
-
-            data.append(scorecard_data)
-
-        return data
+        return checks
 
 
 @attr.attributes(slots=True)
-class PackageScoreMixin(ModelMixin):
+class PackageScore(ModelMixin):
     """
-    Abstract class for storing OSSF scorecard data related to packages.
-    This base class is used for all package-like objects, whether they are manifests
-    or actual package instances.
+    Class for storing scorecard data related to packages.
     """
 
     scoring_tool = String(
@@ -136,25 +109,23 @@ class PackageScoreMixin(ModelMixin):
 
     score_date = Date(repr=True, label="score date", help="score date")
 
-    checks = List(item_type=ScorecardChecksMixin, label="checks", help="List of all checks used")
+    checks = List(item_type=ScorecardCheck, label="checks", help="List of all checks used")
 
     @classmethod
-    def from_data(cls, scorecard_data):
+    def from_data(cls, scorecard_data, sc):
         """
-        Return PackageScore object created out of the package metadata
-        present in `scorecard_data` mapping.
+        Return PackageScore object created from a `scorecard_data` mapping.
         """
-        final_data = {
+        data = {
             "score": str(scorecard_data.get("score")),
             "scoring_tool_version": scorecard_data.get("scorecard").get("version"),
-            "scoring_tool_documentation_url": FetchDocumentationUrl(
+            "scoring_tool_documentation_url": remove_fragment(
                 scorecard_data.get("checks")[0].get("documentation").get("url")
             ),
-            "scoring_tool": "OSSF",
+            #This needs to be a constant variable
+            "scoring_tool": "ossf_scorecard",
             "score_date": scorecard_data.get("date", None),
-            "checks": ScorecardChecksMixin.from_data(scorecard_data.get("checks", [])),
+            "checks": ScorecardCheck.from_data(scorecard_data.get("checks", [])),
         }
 
-        scorecard_data = cls(**final_data)
-
-        return scorecard_data
+        return cls(**data)
